@@ -1,3 +1,4 @@
+app.use(cors()))
 app.use('/api', createProxyMiddleware({
     target: 'https://uat.setu.co',
     changeOrigin: true,
