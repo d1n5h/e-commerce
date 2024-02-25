@@ -1,7 +1,7 @@
 // Initialize the token variable
 let accessToken = "";
 var axios = require("axios").default;
-
+app.use(cors()))
 
 // Function to get access token
 function getAccessToken() {
