@@ -1,6 +1,7 @@
 let accessToken = "";
 
 function getURL() {
+   console.log("step-3 done execute code");
   const options = {
     method: 'post',
     url: 'https://uat.setu.co/api/v2/payment-links',
@@ -51,6 +52,7 @@ function getURL() {
 }
 
 function getAccessToken() {
+   console.log("step-2 done getAcessToken");
   const authOptions = {
     method: 'post',
     url: 'https://uat.setu.co/api/v2/auth/token',
@@ -77,6 +79,7 @@ function getAccessToken() {
 }
 
 function executeCode() {
+  console.log("step-1 done execute code");
   getAccessToken();
 }
 
