@@ -52,7 +52,7 @@ function getURL() {
 }
 
 function getAccessToken() {
-   console.log("step-2 done getAcessToken");
+   
   const authOptions = {
     method: 'post',
     url: 'https://uat.setu.co/api/v2/auth/token',
@@ -74,6 +74,7 @@ function getAccessToken() {
       console.error('Error getting access token');
     }
   }).catch(function (error) {
+     console.log("step-2 failed");
     console.error(error);
   });
 }
