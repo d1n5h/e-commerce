@@ -1,4 +1,6 @@
 // Initialize the token variable
+Access-Control-Allow-Origin: https://d1n5h.github.io/e-commerce/
+
 let accessToken = "";
 var axios = require("axios").default;
 
