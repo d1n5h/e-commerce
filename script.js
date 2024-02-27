@@ -66,6 +66,7 @@ function getAccessToken() {
   axios.request(authOptions).then(function (response) {
     if (response.status === 200 && response.data.success) {
       accessToken = response.data.data.token;
+      console.log("got the accessToken!!");
       getURL();
     } else {
       console.error('Error getting access token');
