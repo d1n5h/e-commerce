@@ -1,61 +1,83 @@
-// Initialize the token variable
 let accessToken = "";
-var axios = require("axios").default;
 
+function getURL() {
+  const options = {
+    method: 'post',
+    url: 'https://uat.setu.co/api/v2/payment-links',
+    headers: {
+      'X-Setu-Product-Instance-ID': '1362076550198986160',
+      'Authorization': 'Bearer ' + accessToken,
+      'Content-Type': 'application/json'
+    },
+    data: {
+        "billerBillID": "29GGGGG1314R9Z6",
+              "amount": {
+                "currencyCode": "INR",
+                "value": 1000000
+              },
+              "expiryDate": "2024-12-06T12:34:28Z",
+              "amountExactness": "EXACT",
+              "settlement": {
+                "primaryAccount": {
+                  "ifsc": "SBIN0021991",
+                  "id": "021000021",
+                  "name": "temp"
+                }
+              },
+              "validationRules": {
+                "sourceAccounts": [
+                  {
+                    "ifsc": "Testing",
+                    "number": "021000099"
+                  }
+                ]
+              }
+    }
+  };
 
-// Function to get access token
+  axios.request(options).then(function (response) {
+    
+
+    // // Extract the shortURL from the response
+    const jsonData = response;
+    // console.log(jsonData.data.data.name)
+    const shortURL = jsonData.data.data.paymentLink.shortURL;
+    // console.log('Short URL:', shortURL);
+    // Open the link in a new tab
+    window.open(shortURL, '_blank');
+  }).catch(function (error) {
+    console.error(error);
+  });
+}
+
 function getAccessToken() {
-    const authOptions = {
-        method: 'post',
-        url: 'http://localhost:3000/api/v2/auth/token', // Use the proxy server URL
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        data: {
-            "clientID": "7eb0314d-fe4c-40cb-9525-061a1634de28",
-            "secret": "4fc3cec7-9f75-4d7f-9806-600d6274980f"
-        }
-    };
+  const authOptions = {
+    method: 'post',
+    url: 'https://uat.setu.co/api/v2/auth/token',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      "clientID": "7eb0314d-fe4c-40cb-9525-061a1634de28",
+      "secret": "4fc3cec7-9f75-4d7f-9806-600d6274980f"
+    }
+  };
 
-    axios.request(authOptions).then(function (response) {
-        if (response.status === 200 && response.data.success) {
-            accessToken = response.data.data.token;
-            makePayment(); // Call the function to initiate payment after getting the access token
-        } else {
-            console.error('Error getting access token');
-        }
-    }).catch(function (error) {
-        console.error(error);
-    });
+  axios.request(authOptions).then(function (response) {
+    if (response.status === 200 && response.data.success) {
+      accessToken = response.data.data.token;
+      getURL();
+    } else {
+      console.error('Error getting access token');
+    }
+  }).catch(function (error) {
+    console.error(error);
+  });
 }
 
-function makePayment() {
-    var options = {
-        method: 'post',
-        url: 'http://localhost:3000/api/v2/payment-links', // Use the proxy server URL
-        headers: {
-            'X-Setu-Product-Instance-ID': '1362076550198986160',
-            Authorization: 'Bearer ' + accessToken,
-            'Content-Type': 'application/json'
-        },
-        data: {
-            // ... your existing data payload
-        }
-    };
-
-    axios.request(options).then(function (response) {
-        if (response.status === 200 && response.data.success) {
-            var paymentLink = response.data.data.paymentLink.shortURL;
-            window.open(paymentLink, '_blank');
-        } else {
-            console.error(response.data);
-            alert('Error initiating payment. Please check the console for details.');
-        }
-    }).catch(function (error) {
-        console.error(error);
-        alert('Error initiating payment. Please check the console for details.');
-    });
+function executeCode() {
+  getAccessToken();
 }
 
-// Call the function to get the access token before making the payment
-getAccessToken();
+
+
