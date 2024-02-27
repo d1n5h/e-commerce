@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mobile Shop</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="script.js" defer></script>
+    <script src="final.js" defer></script>
+    <script>
+  document.getElementById('buyNowBtn').addEventListener('click', function() {
+    executeCode()
+  });
+</script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -80,7 +85,7 @@
             <div class="product-details">
                 <h2>Mobile Phone</h2>
                 <p class="price">Price: ₹10,000 INR</p>
-                <button class="buy-now-btn" onclick="makePayment()">Buy Now</button>
+                <button class="buy-now-btn" onclick="executeCode()">Buy Now</button>
             </div>
             </div>
         </div>
