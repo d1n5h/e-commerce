@@ -2,12 +2,11 @@
 let accessToken = "";
 var axios = require("axios").default;
 
-
 // Function to get access token
-function getAccessToken() {
+function getAccessToken(price) {
     const authOptions = {
         method: 'post',
-        url: 'http://localhost:3000/api/v2/auth/token', // Use the proxy server URL
+        url: 'https://uat.setu.co/api/v2/auth/token', // Use the proxy server URL
         headers: {
             'Content-Type': 'application/json',
         },
@@ -20,7 +19,8 @@ function getAccessToken() {
     axios.request(authOptions).then(function (response) {
         if (response.status === 200 && response.data.success) {
             accessToken = response.data.data.token;
-            makePayment(); // Call the function to initiate payment after getting the access token
+            // Do not call makePayment here; call it after the user clicks the "Buy Now" button
+            makePayment(price);
         } else {
             console.error('Error getting access token');
         }
@@ -29,18 +29,39 @@ function getAccessToken() {
     });
 }
 
-function makePayment() {
+function makePayment(price) {
     var options = {
         method: 'post',
-        url: 'http://localhost:3000/api/v2/payment-links', // Use the proxy server URL
+        url: 'https://uat.setu.co/api/v2/payment-links', // Use the proxy server URL
         headers: {
             'X-Setu-Product-Instance-ID': '1362076550198986160',
             Authorization: 'Bearer ' + accessToken,
             'Content-Type': 'application/json'
         },
         data: {
-            // ... your existing data payload
-        }
+          "billerBillID": "29GGGGG1314R9Z6",
+                "amount": {
+                  "currencyCode": "INR",
+                  "value": price
+                },
+                "expiryDate": "2024-12-06T12:34:28Z",
+                "amountExactness": "EXACT",
+                "settlement": {
+                  "primaryAccount": {
+                    "ifsc": "SBIN0021991",
+                    "id": "021000021",
+                    "name": "temp"
+                  }
+                },
+                "validationRules": {
+                  "sourceAccounts": [
+                    {
+                      "ifsc": "Testing",
+                      "number": "021000099"
+                    }
+                  ]
+                }
+      }
     };
 
     axios.request(options).then(function (response) {
@@ -58,4 +79,4 @@ function makePayment() {
 }
 
 // Call the function to get the access token before making the payment
-getAccessToken();
+getAccessToken(price);
